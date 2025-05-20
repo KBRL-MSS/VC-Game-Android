@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
