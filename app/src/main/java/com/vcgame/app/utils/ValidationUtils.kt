@@ -21,4 +21,19 @@ object ValidationUtils {
         }
         return null // Password is valid
     }
+
+    fun validateUsername(username: String): String? {
+        if (username.isEmpty()) {
+            return "Username cannot be empty."
+        }
+        // Regex: ^[a-zA-Z.]+$
+        // ^        - start of the string
+        // [a-zA-Z.] - matches any letter (upper or lower case) or a dot
+        // +        - one or more times
+        // $        - end of the string
+        if (!username.matches(Regex("^[a-zA-Z.]+$"))) {
+            return "Username can only contain alphabets and dots."
+        }
+        return null // Username is valid
+    }
 }
