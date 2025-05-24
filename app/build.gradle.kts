@@ -49,7 +49,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose.jvmstubs)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
     implementation (libs.androidx.lifecycle.runtime.ktx.v260)
     testImplementation(libs.junit)
@@ -61,4 +60,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation (libs.androidx.runtime.livedata)
     implementation (libs.androidx.lifecycle.runtime.compose)
+    implementation (libs.androidx.navigation.compose)
 }
