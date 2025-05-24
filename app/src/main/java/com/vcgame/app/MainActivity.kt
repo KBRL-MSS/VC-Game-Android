@@ -3,67 +3,68 @@ package com.vcgame.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vcgame.app.ui.login.LoginScreen
-//import com.vcgame.app.ui.login.LoginScreen
+import com.vcgame.app.ui.home.HomeScreen
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import com.vcgame.app.ui.theme.AppTheme
+
+// Define routes for navigation
+object Routes {
+    const val LOGIN = "login"
+    const val HOME = "home/{username}" // Home route with a username argument
+}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            AppTheme {
-                Column {
-                    Greeting(
-                        name = "Gamers",
-                        modifier = Modifier.padding(top = 30.dp)
-                    )
-                    AppLogin()
+            AppTheme { // Apply your app's theme
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    // Setup the navigation controller
+                    val navController = rememberNavController()
+
+                    // Define the navigation graph
+                    NavHost(navController = navController, startDestination = Routes.LOGIN) {
+                        // Login screen composable
+                        composable(Routes.LOGIN) {
+                            LoginScreen(
+                                onLoginClicked = { username, password ->
+                                    // In a real app, you would perform authentication here.
+                                    // For this example, we'll just navigate to the home screen.
+                                    // Pass the username as an argument to the home screen.
+                                    navController.navigate(Routes.HOME.replace("{username}", username)) {
+                                        // Pop up to the login screen to prevent going back to login
+                                        // after successful login.
+                                        popUpTo(Routes.LOGIN) { inclusive = true }
+                                    }
+                                }
+                            )
+                        }
+
+                        // Home screen composable, expecting a username argument
+                        composable(Routes.HOME) { backStackEntry ->
+                            // Retrieve the username argument from the navigation back stack
+                            val username = backStackEntry.arguments?.getString("username") ?: "Guest"
+                            HomeScreen(username = username)
+                        }
+                    }
                 }
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Gamers",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                    AppNavigation()
-//                }
             }
         }
     }
-}
-
-@Composable
-fun AppLogin() {
-    Text(
-        text = "App Login Screen"
-    )
-    LoginScreen()
-//    val navController = rememberNavController()
-//    NavHost(navController, startDestination = "login") {
-//        //composable("login") { LoginScreen() }
-//        composable("home") { HomeScreen() }
-//    }
-}
-
-@Composable
-fun HomeScreen() {
-    Text(
-        text = "Home Screen"
-    )
 }
 
 @Composable
