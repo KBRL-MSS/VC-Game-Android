@@ -13,6 +13,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vcgame.app.ui.theme.AppTheme
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,10 +28,16 @@ fun SignUpScreen(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
+    var signInButtonEnabled by remember { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
+
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Cyan)
+            .verticalScroll(scrollState)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -75,7 +85,19 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TextButton(onClick = onSignInClicked) {
+        TextButton(
+            onClick = {
+                // DISABLE THE BUTTON IMMEDIATELY ON CLICK
+                signInButtonEnabled = false
+                scope.launch {
+                    onSignInClicked()
+                    delay(1000)
+                    signInButtonEnabled = true
+                }
+            },
+            // PASS THE ENABLED STATE TO THE BUTTON (TO avoid multiple touches)
+            enabled = signInButtonEnabled
+        ){
             Text("Already have an account? Sign In")
         }
     }

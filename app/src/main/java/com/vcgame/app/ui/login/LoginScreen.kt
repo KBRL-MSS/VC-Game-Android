@@ -34,7 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vcgame.app.ui.theme.AppTheme
 import com.vcgame.app.utils.ValidationUtils.validatePassword
-import java.nio.file.WatchEvent
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun LoginScreen(
@@ -45,12 +48,18 @@ fun LoginScreen(
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordError by remember { mutableStateOf<String?>(null) } // State for password error message
+    var signUnButtonEnabled by remember { mutableStateOf(true) }
+
+    val scope = rememberCoroutineScope()
+
+    val scrollState = rememberScrollState()
 
     // Column to arrange elements vertically in the center of the screen
     Column(
         modifier = Modifier
             .fillMaxSize() // Fill the entire available space
             .background(Color.Cyan)
+            .verticalScroll(scrollState)
             .padding(16.dp), // Add padding around the column
         verticalArrangement = Arrangement.Center, // Vertically center the content
         horizontalAlignment = Alignment.CenterHorizontally  // Horizontally center the content
@@ -119,7 +128,16 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         // New button/text for navigating to Sign Up
-        TextButton(onClick = onSignUpClicked) { // Call the new lambda
+        TextButton(onClick = {
+            signUnButtonEnabled = false
+            scope.launch {
+                onSignUpClicked() // Perform the navigation action
+                delay(1000L) // Wait for 1 second (1000 milliseconds)
+                signUnButtonEnabled = true // Re-enable the button
+            }
+            },
+            enabled = signUnButtonEnabled
+        ) { // Call the new lambda
             Text("Don't have an account? Sign Up")
         }
     }
