@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vcgame.app.ui.login.LoginScreen
+import com.vcgame.app.ui.signup.SignUpScreen
 import com.vcgame.app.ui.home.HomeScreen
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,7 +21,8 @@ import com.vcgame.app.ui.theme.AppTheme
 // Define routes for navigation
 object Routes {
     const val LOGIN = "login"
-    const val HOME = "home/{username}" // Home route with a username argument
+    const val HOME = "home/{username}"
+    const val SIGNUP = "signup"// Home route with a username argument
 }
 
 class MainActivity : ComponentActivity() {
@@ -42,14 +44,16 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.LOGIN) {
                             LoginScreen(
                                 onLoginClicked = { username, password ->
-                                    // In a real app, you would perform authentication here.
-                                    // For this example, we'll just navigate to the home screen.
-                                    // Pass the username as an argument to the home screen.
+
                                     navController.navigate(Routes.HOME.replace("{username}", username)) {
                                         // Pop up to the login screen to prevent going back to login
                                         // after successful login.
                                         popUpTo(Routes.LOGIN) { inclusive = true }
                                     }
+                                },
+                                onSignUpClicked = {
+                                    // Navigate to the signup screen
+                                    navController.navigate(Routes.SIGNUP)
                                 }
                             )
                         }
@@ -60,25 +64,29 @@ class MainActivity : ComponentActivity() {
                             val username = backStackEntry.arguments?.getString("username") ?: "Guest"
                             HomeScreen(username = username)
                         }
+
+                        //SignUp Page
+                        composable(Routes.SIGNUP) {
+                            SignUpScreen(
+                                onSignUpClicked = { username, password, confirmPassword ->
+                                    navController.navigate(Routes.HOME.replace("{username}", username)) {
+                                        // Clear all screens up to login, then clear login too.
+                                        // This makes Home the new start destination.
+                                        popUpTo(Routes.LOGIN) { inclusive = true }
+                                    }
+
+                                    // Alternative: Go back to Login after signup
+                                    navController.popBackStack()
+                                },
+                                onSignInClicked = {
+                                    // Navigate back to the login screen
+                                    navController.popBackStack() // Pops the SignUp screen off the stack
+                                }
+                            )
+                        }
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AppTheme {
-        Greeting("Gamers")
     }
 }
