@@ -14,13 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vcgame.app.ui.theme.AppTheme
 
-/**
- * Composable function for the Sign Up Screen.
- *
- * @param onSignUpClicked A lambda function invoked when the sign up button is clicked.
- * It takes username, password, and confirm password as arguments.
- * @param onSignInClicked A lambda function invoked when the "Already have an account?" text is clicked.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(

@@ -44,9 +44,7 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.LOGIN) {
                             LoginScreen(
                                 onLoginClicked = { username, password ->
-                                    // In a real app, you would perform authentication here.
-                                    // For this example, we'll just navigate to the home screen.
-                                    // Pass the username as an argument to the home screen.
+
                                     navController.navigate(Routes.HOME.replace("{username}", username)) {
                                         // Pop up to the login screen to prevent going back to login
                                         // after successful login.
@@ -58,7 +56,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(Routes.SIGNUP)
                                 }
                             )
-                                                    }
+                        }
 
                         // Home screen composable, expecting a username argument
                         composable(Routes.HOME) { backStackEntry ->
@@ -71,11 +69,6 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.SIGNUP) {
                             SignUpScreen(
                                 onSignUpClicked = { username, password, confirmPassword ->
-                                    // In a real app, you would handle user registration here.
-                                    // For this example, we'll just navigate back to the login screen
-                                    // after "successful" signup, or directly to home.
-                                    // Let's navigate to home for simplicity, or you can go back to login.
-                                    // Example: Go to home directly after signup
                                     navController.navigate(Routes.HOME.replace("{username}", username)) {
                                         // Clear all screens up to login, then clear login too.
                                         // This makes Home the new start destination.
@@ -83,7 +76,7 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     // Alternative: Go back to Login after signup
-                                    // navController.popBackStack()
+                                    navController.popBackStack()
                                 },
                                 onSignInClicked = {
                                     // Navigate back to the login screen
