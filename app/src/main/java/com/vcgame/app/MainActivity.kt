@@ -22,15 +22,14 @@ import com.vcgame.app.ui.theme.AppTheme
 object Routes {
     const val LOGIN = "login"
     const val HOME = "home/{username}"
-    const val SIGNUP = "signup"// Home route with a username argument
+    const val SIGNUP = "signup"
 }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppTheme { // Apply your app's theme
-                // A surface container using the 'background' color from the theme
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -44,7 +43,6 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.LOGIN) {
                             LoginScreen(
                                 onLoginClicked = { username, password ->
-
                                     navController.navigate(Routes.HOME.replace("{username}", username)) {
                                         // Pop up to the login screen to prevent going back to login
                                         // after successful login.
@@ -62,7 +60,7 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.HOME) { backStackEntry ->
                             // Retrieve the username argument from the navigation back stack
                             val username = backStackEntry.arguments?.getString("username") ?: "Guest"
-                            HomeScreen(username = username)
+                            HomeScreen(rootNavController = navController, initialUsername = username)
                         }
 
                         //SignUp Page
@@ -74,7 +72,6 @@ class MainActivity : ComponentActivity() {
                                         // This makes Home the new start destination.
                                         popUpTo(Routes.LOGIN) { inclusive = true }
                                     }
-
                                     // Alternative: Go back to Login after signup
                                     navController.popBackStack()
                                 },
