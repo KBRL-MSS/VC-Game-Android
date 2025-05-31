@@ -1,6 +1,6 @@
 package com.vcgame.app.ui.home
 
-import androidx.compose.foundation.background // Added import
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
@@ -40,21 +39,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.foundation.layout.Box
 import coil.compose.AsyncImage
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme // Added import for MaterialTheme.colorScheme.surfaceVariant
-import androidx.compose.ui.composed // Added for composed modifier usage
-import androidx.compose.ui.draw.shadow // Added for shadow
-import androidx.compose.ui.unit.Dp // Added for Dp type
-import androidx.compose.ui.draw.clip // Added for clip
-import androidx.compose.foundation.shape.RoundedCornerShape // Added for RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.sp
@@ -66,7 +57,10 @@ fun DashboardScreen(
     onGoToProfile: () -> Unit,
     onGoToSettings: () -> Unit,
     onLogout: () -> Unit,
-    onGoToDashboard: () -> Unit
+    onPlay: () -> Unit,
+    onGoToDashboard: () -> Unit,
+    onGoToJoinParty: () -> Unit,
+    onGoToCreateParty: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -110,19 +104,21 @@ fun DashboardScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 16.dp), // Add some bottom padding
-                    horizontalAlignment = Alignment.End,
+                        .padding(bottom = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
                     NavigationDrawerItem(
-                        icon = { Icon(Icons.Default.Close, contentDescription = null) }, // Added Logout icon
-                        label = { Text("Logout") },
+                        icon = { Icon(Icons.Default.Close, contentDescription = null, modifier = Modifier.align(
+                            Alignment.CenterHorizontally)) }, // Added Logout icon
+                        label = { Text(text = "Logout", modifier = Modifier.align(Alignment.CenterHorizontally)) },
                         selected = false,
                         onClick = {
                             scope.launch { drawerState.close() }
                             onLogout()
                         },
-                        modifier = Modifier.fillMaxWidth(0.65f) // Make button take 80% width, for instance
+                        modifier = Modifier
+                            .width(150.dp)
                     )
                 }
             }
@@ -167,7 +163,7 @@ fun DashboardScreen(
                     )
                     Spacer(Modifier.height(50.dp))
                     FloatingActionButton(
-                        onClick = { /* Action for FAB */ println("FAB Clicked") },
+                        onClick = { onPlay() },
                         shape = CircleShape,
                         modifier = Modifier
                             .width(200.dp)
@@ -202,7 +198,7 @@ fun DashboardScreen(
                             verticalAlignment = Alignment.Bottom
                         ) {
                             Button(
-                                onClick = { /* Action for Left Button */ println("Join Party Clicked") },
+                                onClick = onGoToJoinParty,
                                 shape = RectangleShape,
                                 modifier = Modifier
                                     .weight(1f) // Takes available space
@@ -214,7 +210,7 @@ fun DashboardScreen(
                             Spacer(modifier = Modifier.width(1.dp))
 
                             Button(
-                                onClick = { /* Action for Right Button */ println("Create Party Clicked") },
+                                onClick = onGoToCreateParty,
                                 shape = RectangleShape,
                                 modifier = Modifier
                                     .weight(1f) // Takes available space
@@ -249,7 +245,10 @@ fun DashboardScreenPreview() {
             onGoToProfile = {},
             onGoToSettings = {},
             onLogout = {},
-            onGoToDashboard = {}
+            onGoToDashboard = {},
+            onGoToJoinParty = {},
+            onGoToCreateParty = {},
+            onPlay = {}
         )
     }
 }
