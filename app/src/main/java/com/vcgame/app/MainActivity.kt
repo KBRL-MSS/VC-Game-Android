@@ -8,6 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -38,7 +41,12 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     // Define the navigation graph
-                    NavHost(navController = navController, startDestination = Routes.LOGIN) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = Routes.LOGIN,
+                        enterTransition = { fadeIn(animationSpec = tween(500)) },
+                        exitTransition = { fadeOut(animationSpec = tween(500)) }
+                    ) {
                         // Login screen composable
                         composable(Routes.LOGIN) {
                             LoginScreen(
@@ -52,6 +60,11 @@ class MainActivity : ComponentActivity() {
                                 onSignUpClicked = {
                                     // Navigate to the signup screen
                                     navController.navigate(Routes.SIGNUP)
+                                },
+                                onSkipClicked = {
+                                    navController.navigate("home/Guest") {
+                                        popUpTo(0) { inclusive = true }
+                                    }
                                 }
                             )
                         }
@@ -72,12 +85,15 @@ class MainActivity : ComponentActivity() {
                                         // This makes Home the new start destination.
                                         popUpTo(Routes.LOGIN) { inclusive = true }
                                     }
-                                    // Alternative: Go back to Login after signup
-                                    navController.popBackStack()
                                 },
                                 onSignInClicked = {
                                     // Navigate back to the login screen
                                     navController.popBackStack() // Pops the SignUp screen off the stack
+                                },
+                                onSkipClicked = {
+                                    navController.navigate("home/Guest") {
+                                        popUpTo(0) { inclusive = true }
+                                    }
                                 }
                             )
                         }

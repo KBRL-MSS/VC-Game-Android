@@ -32,7 +32,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     onLoginClicked: (String, String) -> Unit,
-    onSignUpClicked: () -> Unit
+    onSignUpClicked: () -> Unit,
+    onSkipClicked: () -> Unit
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -43,7 +44,7 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -54,118 +55,138 @@ fun LoginScreen(
                     )
                 )
             )
-            .verticalScroll(scrollState)
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Welcome to KBRL Games!",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        Text(
-            text = "Sign in to continue",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        OutlinedTextField(
-            value = username,
-            onValueChange = { username = it },
-            label = { Text("Username") },
-            placeholder = { Text("Enter your username") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth(),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-            )
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = {
-                password = it
-                passwordError = null
-            },
-            label = { Text("Password") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Lock,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            },
-            trailingIcon = {
-                val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                val description = if (passwordVisible) "Hide password" else "Show password"
-
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = image, contentDescription = description)
-                }
-            },
-            singleLine = true,
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            shape = RoundedCornerShape(16.dp),
-            modifier = Modifier.fillMaxWidth(),
-            isError = passwordError != null,
-            supportingText = {
-                passwordError?.let {
-                    Text(text = it, color = MaterialTheme.colorScheme.error)
-                }
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-            )
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = {
-                val validationResult = validatePassword(password)
-                if (validationResult == null) {
-                    onLoginClicked(username, password)
-                } else {
-                    passwordError = validationResult
-                }
-            },
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Login", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+            Text(
+                text = "Welcome to KBRL Games!",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Sign in to continue",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 32.dp)
+            )
+
+            OutlinedTextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text("Username") },
+                placeholder = { Text("Enter your username") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                singleLine = true,
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                )
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = password,
+                onValueChange = {
+                    password = it
+                    passwordError = null
+                },
+                label = { Text("Password") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                trailingIcon = {
+                    val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                    val description = if (passwordVisible) "Hide password" else "Show password"
+
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(imageVector = image, contentDescription = description)
+                    }
+                },
+                singleLine = true,
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier.fillMaxWidth(),
+                isError = passwordError != null,
+                supportingText = {
+                    passwordError?.let {
+                        Text(text = it, color = MaterialTheme.colorScheme.error)
+                    }
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                )
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = {
+                    val validationResult = validatePassword(password)
+                    if (validationResult == null) {
+                        onLoginClicked(username, password)
+                    } else {
+                        passwordError = validationResult
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+            ) {
+                Text("Login", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            TextButton(onClick = {
+                signUnButtonEnabled = false
+                scope.launch {
+                    onSignUpClicked()
+                    delay(1000L)
+                    signUnButtonEnabled = true
+                }
+            },
+                enabled = signUnButtonEnabled
+            ) {
+                Text("Don't have an account? Sign Up", fontWeight = FontWeight.Medium)
+            }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        TextButton(onClick = {
-            signUnButtonEnabled = false
-            scope.launch {
-                onSignUpClicked()
-                delay(1000L)
-                signUnButtonEnabled = true
-            }
-        },
-            enabled = signUnButtonEnabled
+        // Skip Button at top right - moved here to be on top of the Column
+        TextButton(
+            onClick = onSkipClicked,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 40.dp, end = 16.dp)
         ) {
-            Text("Don't have an account? Sign Up", fontWeight = FontWeight.Medium)
+            Text(
+                text = "Skip",
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
         }
     }
 }
@@ -176,7 +197,8 @@ fun LoginScreenPreview() {
     AppTheme {
         LoginScreen(
             onLoginClicked = { _, _ -> },
-            onSignUpClicked = { }
+            onSignUpClicked = { },
+            onSkipClicked = { }
         )
     }
 }
