@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">app</string>
+    <string name="app_name">KBRL</string>
+    <string name="welcome_to_app">Welcome to KBRL Games!</string>
+    <string name="join_app_today">Join KBRL Games today</string>
 </resources>

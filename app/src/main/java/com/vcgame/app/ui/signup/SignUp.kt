@@ -24,6 +24,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.vcgame.app.R
 import com.vcgame.app.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -71,7 +73,7 @@ fun SignUpScreen(
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "Join KBRL Games today",
+                text = stringResource(R.string.join_app_today),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(bottom = 32.dp)

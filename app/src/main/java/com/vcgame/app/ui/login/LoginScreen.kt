@@ -24,6 +24,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.vcgame.app.R
 import com.vcgame.app.ui.theme.AppTheme
 import com.vcgame.app.utils.ValidationUtils.validatePassword
 import kotlinx.coroutines.delay
@@ -65,7 +67,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Welcome to KBRL Games!",
+                text = stringResource(R.string.welcome_to_app),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
