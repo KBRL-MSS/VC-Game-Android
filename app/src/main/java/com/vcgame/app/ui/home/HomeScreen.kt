@@ -13,6 +13,7 @@ import com.vcgame.app.ui.party.CreatePartyScreen
 import com.vcgame.app.ui.party.JoinPartyScreen
 import com.vcgame.app.ui.party.PartyDetailsScreen
 import com.vcgame.app.ui.game.TicTacToeGameScreen
+import com.vcgame.app.ui.game.SnakeGameScreen
 import com.vcgame.app.ui.theme.AppTheme
 
 /**
@@ -42,7 +43,8 @@ fun HomeScreen(
                 onGoToDashboard = { homeNavController.navigate(HomeGraphRoutes.DASHBOARD) },
                 onGoToCreateParty = { homeNavController.navigate(HomeGraphRoutes.CREATE_PARTY)},
                 onGoToJoinParty = {homeNavController.navigate(HomeGraphRoutes.JOIN_PARTY)},
-                onPlay = {homeNavController.navigate(HomeGraphRoutes.START_GAME)},
+                onPlayTicTacToe = {homeNavController.navigate(HomeGraphRoutes.TIC_TAC_TOE_GAME)},
+                onPlaySnake = {homeNavController.navigate(HomeGraphRoutes.SNAKE_GAME)},
                 onLogout = {
                     // Navigate back to the Login screen in the main graph
                     // This clears the entire main graph back stack and navigates to LOGIN
@@ -75,7 +77,7 @@ fun HomeScreen(
             PartyDetailsScreen(
                 partyId = null,
                 onBack = {homeNavController.navigate(HomeGraphRoutes.DASHBOARD)},
-                onStartGame = {homeNavController.navigate(HomeGraphRoutes.START_GAME)}
+                onStartGame = {homeNavController.navigate(HomeGraphRoutes.TIC_TAC_TOE_GAME)}
             )
         }
 
@@ -86,8 +88,14 @@ fun HomeScreen(
             )
         }
 
-        composable (HomeGraphRoutes.START_GAME){
+        composable (HomeGraphRoutes.TIC_TAC_TOE_GAME){
             TicTacToeGameScreen(
+                onBack = {homeNavController.navigate(HomeGraphRoutes.DASHBOARD)}
+            )
+        }
+
+        composable (HomeGraphRoutes.SNAKE_GAME){
+            SnakeGameScreen(
                 onBack = {homeNavController.navigate(HomeGraphRoutes.DASHBOARD)}
             )
         }

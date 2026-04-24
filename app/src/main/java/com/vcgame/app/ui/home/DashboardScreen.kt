@@ -66,7 +66,8 @@ fun DashboardScreen(
     onGoToProfile: () -> Unit,
     onGoToSettings: () -> Unit,
     onLogout: () -> Unit,
-    onPlay: () -> Unit,
+    onPlayTicTacToe: () -> Unit,
+    onPlaySnake: () -> Unit,
     onGoToDashboard: () -> Unit,
     onGoToJoinParty: () -> Unit,
     onGoToCreateParty: () -> Unit
@@ -94,9 +95,14 @@ fun DashboardScreen(
 
     val games = listOf(
         GameItem(
+            name = "Snake",
+            imageRes = R.drawable.ic_snake,
+            onPlay = onPlaySnake
+        ),
+        GameItem(
             name = "Tic Tac Toe",
             imageRes = R.drawable.ic_tictactoe,
-            onPlay = onPlay
+            onPlay = onPlayTicTacToe
         ),
         GameItem(
             name = "More Games Soon",
@@ -287,7 +293,7 @@ fun GameCard(game: GameItem) {
                 onClick = game.onPlay,
                 modifier = Modifier.fillMaxWidth().height(48.dp),
                 shape = RoundedCornerShape(12.dp),
-                enabled = game.name == "Tic Tac Toe"
+                enabled = game.name == "Tic Tac Toe" || game.name == "Snake"
             ) {
                 Text("Play")
             }
@@ -320,7 +326,8 @@ fun DashboardScreenPreview() {
             onGoToDashboard = {},
             onGoToJoinParty = {},
             onGoToCreateParty = {},
-            onPlay = {}
+            onPlayTicTacToe = {},
+            onPlaySnake = {}
         )
     }
 }

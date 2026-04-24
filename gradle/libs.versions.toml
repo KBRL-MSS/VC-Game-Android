@@ -13,8 +13,10 @@ lifecycleRuntimeKtxVersion = "2.6.0"
 navigationCompose = "2.9.0"
 navigationComposeJvmstubs = "2.9.0"
 runtimeLivedata = "1.8.1"
+dataStore = "1.1.2"
 
 [libraries]
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "dataStore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtxVersion" }
 androidx-lifecycle-runtime-ktx-v260 = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
