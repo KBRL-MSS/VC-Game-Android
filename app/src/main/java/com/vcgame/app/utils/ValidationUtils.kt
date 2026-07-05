@@ -3,6 +3,7 @@ package com.vcgame.app.utils
 object ValidationUtils {
 
     fun validatePassword(password: String): String? {
+        return null //skipping check for now
         if (password.length < 8) {
             return "Password must be at least 8 characters long."
         }

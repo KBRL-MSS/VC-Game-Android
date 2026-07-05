@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- Grid Lines -->
+    <path
+        android:pathData="M17,8V40M31,8V40M8,17H40M8,31H40"
+        android:strokeColor="#BDBDBD"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"/>
+
+    <!-- X in top-left cell -->
+    <path
+        android:pathData="M10,10L15,15M15,10L10,15"
+        android:strokeColor="#673AB7"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+
+    <!-- O in center cell -->
+    <path
+        android:pathData="M24,24m-4,0a4,4 0 1,1 8,0a4,4 0 1,1 -8,0"
+        android:strokeColor="#00BCD4"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"/>
+
+    <!-- X in bottom-right cell -->
+    <path
+        android:pathData="M33,33L38,38M38,33L33,38"
+        android:strokeColor="#673AB7"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"/>
+</vector>

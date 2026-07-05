@@ -49,6 +49,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.text.font.FontWeight
+
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import com.vcgame.app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +66,8 @@ fun DashboardScreen(
     onGoToProfile: () -> Unit,
     onGoToSettings: () -> Unit,
     onLogout: () -> Unit,
-    onPlay: () -> Unit,
+    onPlayTicTacToe: () -> Unit,
+    onPlaySnake: () -> Unit,
     onGoToDashboard: () -> Unit,
     onGoToJoinParty: () -> Unit,
     onGoToCreateParty: () -> Unit
@@ -80,10 +90,26 @@ fun DashboardScreen(
         }
     )
 
-    // Define the height of your fixed bottom bar
     val bottomBarHeight = 60.dp
-    val ticTacToeImageUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Tic_tac_toe.svg/800px-Tic_tac_toe.svg.png"
+    val scrollState = rememberScrollState()
 
+    val games = listOf(
+        GameItem(
+            name = "Snake",
+            imageRes = R.drawable.ic_snake,
+            onPlay = onPlaySnake
+        ),
+        GameItem(
+            name = "Tic Tac Toe",
+            imageRes = R.drawable.ic_tictactoe,
+            onPlay = onPlayTicTacToe
+        ),
+        GameItem(
+            name = "More Games Soon",
+            imageRes = R.drawable.ic_more_games,
+            onPlay = {}
+        )
+    )
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -110,7 +136,7 @@ fun DashboardScreen(
                 ) {
                     NavigationDrawerItem(
                         icon = { Icon(Icons.Default.Close, contentDescription = null, modifier = Modifier.align(
-                            Alignment.CenterHorizontally)) }, // Added Logout icon
+                            Alignment.CenterHorizontally)) },
                         label = { Text(text = "Logout", modifier = Modifier.align(Alignment.CenterHorizontally)) },
                         selected = false,
                         onClick = {
@@ -140,69 +166,59 @@ fun DashboardScreen(
                 )
             }
         ) { paddingValues ->
-            // Use a Box to layer the main content, and the fixed bottom bar
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues) // Apply padding from Scaffold for TopBar
+                    .padding(paddingValues)
             ) {
-                Column (
-                    modifier = Modifier
-                        .fillMaxSize(),
+                Column(
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    AsyncImage(
-                        model = ticTacToeImageUrl,
-                        contentDescription = "Tic Tac Toe Board",
-                        modifier = Modifier
-                            .size(300.dp) // Adjust size as needed
-                            .clip(RoundedCornerShape(16.dp)), // Optional: rounded corners for the image
-                            //.shadow(8.dp, RoundedCornerShape(16.dp)), // Optional: shadow
-                        contentScale = ContentScale.Fit // Fit the image within the bounds
+                ) {
+                    Text(
+                        text = "Featured Games",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 24.dp, start = 24.dp).align(Alignment.Start)
                     )
-                    Spacer(Modifier.height(50.dp))
-                    FloatingActionButton(
-                        onClick = { onPlay() },
-                        shape = CircleShape,
-                        modifier = Modifier
-                            .width(200.dp)
-                    ) {
-                        Text(
-                            text = "Play",
-                            fontSize = 20.sp
-                        )
-                    }
 
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(scrollState)
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        games.forEach { game ->
+                            GameCard(game = game)
+                        }
+                    }
+                    
+                    Spacer(Modifier.height(100.dp))
                 }
+
+                // Bottom Buttons Container
                 Column (
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(bottomBarHeight) // Set the fixed height for the entire bottom bar
-                            //.align(Alignment.BottomCenter) // Align this Box to the very bottom center of its parent Box
-                            .background(MaterialTheme.colorScheme.surface) // Optional: Add a background color for the bar
-                        //.shadow(elevation = 8.dp) // Optional: Add a shadow for separation
+                            .height(bottomBarHeight)
+                            .background(MaterialTheme.colorScheme.surface)
                     ) {
-                        // Row for left and right buttons
                         Row(
-                            modifier = Modifier
-                                .fillMaxSize(), // Fill the height of this bottom Box
-                            //.padding(horizontal = 16.dp), // Padding inside the bottom bar for the buttons
-                            horizontalArrangement = Arrangement.SpaceAround, // Distribute space
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalArrangement = Arrangement.SpaceAround,
                             verticalAlignment = Alignment.Bottom
                         ) {
                             Button(
                                 onClick = onGoToJoinParty,
                                 shape = RectangleShape,
-                                modifier = Modifier
-                                    .weight(1f) // Takes available space
-                                    .height(56.dp) // Standard button height
+                                modifier = Modifier.weight(1f).height(56.dp)
                             ) {
                                 Text("Join Party")
                             }
@@ -212,23 +228,85 @@ fun DashboardScreen(
                             Button(
                                 onClick = onGoToCreateParty,
                                 shape = RectangleShape,
-                                modifier = Modifier
-                                    .weight(1f) // Takes available space
-                                    .height(56.dp)
+                                modifier = Modifier.weight(1f).height(56.dp)
                             ) {
                                 Text("Create Party")
                             }
                         }
-
-
                     }
                 }
-
-
             }
         }
     }
 }
+
+@Composable
+fun GameCard(game: GameItem) {
+    Card(
+        modifier = Modifier
+            .width(280.dp)
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (game.imageRes != null) {
+                Icon(
+                    painter = painterResource(id = game.imageRes),
+                    contentDescription = game.name,
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    tint = Color.Unspecified
+                )
+            } else {
+                AsyncImage(
+                    model = game.imageUrl,
+                    contentDescription = game.name,
+                    modifier = Modifier
+                        .size(200.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    contentScale = ContentScale.Fit,
+                    onLoading = { println("Coil: Loading ${game.imageUrl}") },
+                    onSuccess = { println("Coil: Success ${game.imageUrl}") },
+                    onError = { error ->
+                        println("Coil: Error ${game.imageUrl} - ${error.result.throwable.message}")
+                    }
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Text(
+                text = game.name,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            Button(
+                onClick = game.onPlay,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
+                shape = RoundedCornerShape(12.dp),
+                enabled = game.name == "Tic Tac Toe" || game.name == "Snake"
+            ) {
+                Text("Play")
+            }
+        }
+    }
+}
+
+data class GameItem(
+    val name: String,
+    val imageUrl: String? = null,
+    val imageRes: Int? = null,
+    val onPlay: () -> Unit
+)
 
 data class DrawerMenuItem(
     val title: String,
@@ -248,7 +326,8 @@ fun DashboardScreenPreview() {
             onGoToDashboard = {},
             onGoToJoinParty = {},
             onGoToCreateParty = {},
-            onPlay = {}
+            onPlayTicTacToe = {},
+            onPlaySnake = {}
         )
     }
 }

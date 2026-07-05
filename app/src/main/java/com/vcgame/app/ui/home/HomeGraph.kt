@@ -10,5 +10,6 @@ object HomeGraphRoutes {
     const val CREATE_PARTY = "create_party"
     const val PARTY_DETAILS = "party_details"
     const val JOIN_PARTY = "join_party"
-    const val START_GAME = "start_game"
+    const val TIC_TAC_TOE_GAME = "tic_tac_toe_game"
+    const val SNAKE_GAME = "snake_game"
 }
